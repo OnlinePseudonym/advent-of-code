@@ -9,9 +9,9 @@ namespace AdventOfCode
         static void Main(string[] args)
         {
             var intCodeComputer = new Day2();
-            var proccessedInputs = intCodeComputer.CalculateOutput(intCodeComputer.InputList);
+            var proccessedInputs = intCodeComputer.CalculateOutput(intCodeComputer.Memory);
 
-            Console.WriteLine(string.Join(", ", proccessedInputs.ToArray()));
+            Console.WriteLine(proccessedInputs.First());
         }
     }
 }
