@@ -1,5 +1,6 @@
 ﻿using AdventOfCode.Days;
 using System;
+using System.Linq;
 
 namespace AdventOfCode
 {
@@ -7,15 +8,10 @@ namespace AdventOfCode
     {
         static void Main(string[] args)
         {
-            var totalFuel = 0;
+            var intCodeComputer = new Day2();
+            var proccessedInputs = intCodeComputer.CalculateOutput(intCodeComputer.InputList);
 
-            var day1 = new Day1();
-
-            foreach (var mass in day1.input) {
-                totalFuel += day1.CalculatFuelForMass(mass);
-            }
-
-            Console.WriteLine(totalFuel);
+            Console.WriteLine(string.Join(", ", proccessedInputs.ToArray()));
         }
     }
 }
