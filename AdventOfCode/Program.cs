@@ -8,11 +8,11 @@ namespace AdventOfCode
     {
         static void Main(string[] args)
         {
-            var lineCalculator = new Day3();
+            var bruteForcePWGenerator = new Day4();
 
-            var fewestSteps = lineCalculator.GetFewestStepsToIntersection();
+            var possibleCombinations = bruteForcePWGenerator.GetCountOfValidPasswords();
 
-            Console.WriteLine(fewestSteps);
+            Console.WriteLine(possibleCombinations);
         }
     }
 }
