@@ -8,11 +8,7 @@ namespace AdventOfCode
     {
         static void Main(string[] args)
         {
-            var bruteForcePWGenerator = new Day4();
-
-            var possibleCombinations = bruteForcePWGenerator.GetCountOfValidPasswords();
-
-            Console.WriteLine(possibleCombinations);
+            Day2.LogAnswerToConsole();
         }
     }
 }

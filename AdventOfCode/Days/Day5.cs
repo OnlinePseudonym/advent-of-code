@@ -6,13 +6,11 @@ using System.Text;
 
 namespace AdventOfCode.Days
 {
-    static class Day2
+    class Day5
     {
         public static void LogAnswerToConsole()
         {
             var intcodeComputer = new IntcodeComputer();
-
-            Console.WriteLine(intcodeComputer.FindInputsForOutput(19690720));
         }
     }
 }
