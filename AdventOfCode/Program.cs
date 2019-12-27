@@ -8,11 +8,11 @@ namespace AdventOfCode
     {
         static void Main(string[] args)
         {
-            var intCodeComputer = new Day2();
+            var lineCalculator = new Day3();
 
-            var output = intCodeComputer.FindInputsForOutput(19690720);
+            var fewestSteps = lineCalculator.GetFewestStepsToIntersection();
 
-            Console.WriteLine(output);
+            Console.WriteLine(fewestSteps);
         }
     }
 }
