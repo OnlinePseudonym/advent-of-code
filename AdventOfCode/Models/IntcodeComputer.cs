@@ -24,7 +24,7 @@ namespace AdventOfCode.Models
                 var proccessed = instruction.ProcessInstruction();
 
                 if (proccessed == -1) break;
-                i += instruction.InstructionLength;
+                i = instruction.GetPointerPosition();
             };
 
             return Memory;
