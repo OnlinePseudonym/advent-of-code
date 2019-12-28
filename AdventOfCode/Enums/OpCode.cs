@@ -8,6 +8,8 @@ namespace AdventOfCode.Enums
     {
         Addition = 1,
         Multiplication = 2,
+        SaveInput = 3,
+        Output = 4,
         Halt = 99
     }
 }

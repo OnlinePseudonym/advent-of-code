@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AdventOfCode.Models;
 using System.Text;
 
 namespace AdventOfCode.Days
@@ -14,7 +15,7 @@ namespace AdventOfCode.Days
             var output = 0;
             foreach (var number in RANGE)
             {
-                var password = digitArr(number);
+                var password = Utilities.digitArr(number);
 
                 if (isValidPassword(password))
                 {
@@ -53,17 +54,6 @@ namespace AdventOfCode.Days
             }
 
             return output;
-        }
-
-        private static int[] digitArr(int n)
-        {
-            var result = new int[6];
-            for (int i = result.Length - 1; i >= 0; i--)
-            {
-                result[i] = n % 10;
-                n /= 10;
-            }
-            return result;
         }
     }
 }
