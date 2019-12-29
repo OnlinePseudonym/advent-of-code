@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace AdventOfCode.Models
@@ -15,6 +16,12 @@ namespace AdventOfCode.Models
                 n /= 10;
             }
             return result;
+        }
+
+        public static string[] getInputStrings(string fileName)
+        {
+            string filePath = Path.GetFullPath(@"..\..\..\input\" + fileName);
+            return File.ReadAllLines(filePath);
         }
     }
 }
