@@ -8,9 +8,12 @@ namespace AdventOfCode.Models
     class Tree
     {
         private ITreeNode root;
+        public Tree()
+        {
+        }
+
         public Tree(IList<ITreeNode> nodes)
         {
-            root = nodes.FirstOrDefault(x => x.Parent == null);
             BuildTree(nodes);
         }
 
@@ -21,43 +24,40 @@ namespace AdventOfCode.Models
 
         public void BuildTree(IList<ITreeNode> nodes)
         {
+            root = nodes.FirstOrDefault(x => x.Parent == null);
             AddTreeNode(root, nodes);
         }
 
-        public int GetTotalOrbits()
+        public int GetDepthOfNode(ITreeNode node)
         {
-            if (root == null)
+            if (node.Parent == null)
             {
-                return 0;
+                return 1;
             }
 
-            int totalOrbits = 0;
-            int currDepth = 0;
+            return GetDepthOfNode(node.Parent) + 1;
+        }
 
-            Queue<ITreeNode> queue = new Queue<ITreeNode>();
-            queue.Enqueue(root);
+        public ITreeNode GetCommonAncestor(ITreeNode firstNode, ITreeNode secondNode)
+        {
+            var firstPath = GetPathToNode(firstNode, new List<ITreeNode>());
+            var secondPath = GetPathToNode(secondNode, new List<ITreeNode>());
 
-            while (queue.Count > 0)
+            ITreeNode commonAncestor = firstPath.Intersect(secondPath).FirstOrDefault();
+
+            return commonAncestor;
+        }
+
+        private IList<ITreeNode> GetPathToNode(ITreeNode node, IList<ITreeNode> path)
+        {
+            path.Add(node);
+
+            if (node == root)
             {
-                currDepth++;
-
-                var queueSize = queue.Count;
-
-                for (var i = 0; i < queueSize; i++)
-                {
-                    var current = queue.Dequeue();
-                    if (current.Children.Any())
-                    {
-                        foreach (var child in current.Children)
-                        {
-                            totalOrbits += currDepth;
-                            queue.Enqueue(child);
-                        }
-                    }
-                }
+                return path;
             }
 
-            return totalOrbits;
+            return GetPathToNode(node.Parent, path);
         }
 
         private static void AddTreeNode(ITreeNode node, IList<ITreeNode> nodes)

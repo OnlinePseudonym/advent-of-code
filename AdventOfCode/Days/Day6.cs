@@ -11,14 +11,20 @@ namespace AdventOfCode.Days
         public static void LogAnswerToConsole()
         {
             var input = Utilities.getInputStrings("day6.txt");
+            var nodes = BuildTreeNodes(input);
 
-            var tree = createOrbitalMapTree(input);
-            var depth = tree.GetTotalOrbits();
+            var startNode = nodes.Where(x => x.Name == "YOU").FirstOrDefault();
+            var targetNode = nodes.Where(x => x.Name == "SAN").FirstOrDefault();
 
-            Console.WriteLine(depth);
+            var map = new OrbitalMap(nodes);
+
+            int distance = map.GetOrbitsBetweenTwoObjects(startNode, targetNode); 
+
+            int depth = map.GetTotalOrbits();
+            Console.WriteLine(distance);
         }
-
-        private static Tree createOrbitalMapTree(string[] input)
+        
+        private static IList<ITreeNode> BuildTreeNodes(string[] input)
         {
             var nodes = new List<ITreeNode>();
 
@@ -33,7 +39,7 @@ namespace AdventOfCode.Days
                 child.SetParent(parent);
             }
 
-            return new Tree(nodes);
+            return nodes;
         }
 
         private static ITreeNode getOrCreateNode(string name, IList<ITreeNode> nodes)
