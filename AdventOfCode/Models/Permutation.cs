@@ -26,6 +26,29 @@ namespace AdventOfCode.Models
             return HamiltonianPermutationsIterator(n);
         }
 
+        public static IEnumerable<Permutation> HamilitonianPermutations(IEnumerable<int> numbers)
+        {
+            if (numbers.Count() == 0)
+            {
+                yield return Empty;
+                yield break;
+            }
+
+            var forwards = false;
+
+            var number = numbers.First();
+            var nextLevel = numbers.Select(x => x).Where((x, i) => i > 0);
+
+            foreach (var permutation in HamilitonianPermutations(nextLevel))
+            {
+                for (int i = 0; i < numbers.Count(); i += 1)
+                {
+                    var position = forwards ? i : numbers.Count() - i - 1;
+                    yield return new Permutation(permutation.InsertAt(position, number));
+                }
+            }
+        }
+
         private static IEnumerable<Permutation> HamiltonianPermutationsIterator(int n)
         {
             if (n == 0)

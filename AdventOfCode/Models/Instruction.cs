@@ -15,11 +15,14 @@ namespace AdventOfCode.Models
         private int ThirdParameter;
         private int PointerPosition;
         private IList<int> Memory;
-
-        public bool KillProgram { get; set; } = false;
-        public bool PhaseInitialized { get; set; } = false;
-        public int Output { get; set; }
-
+        private bool IsAutomated;
+        public int Output { get; private set; }
+        private int Input;
+        private int Phase;
+        public bool PhaseInitialized { get; private set; }
+        public bool InputUsed { get; private set; }
+        public bool KillProgram { get; private set; }
+        public bool Paused { get; private set; }
         public Instruction(IList<int> addresses, int pointerInstruction)
         {
             var instructionParameter = Utilities.digitArr(addresses[pointerInstruction]);
@@ -34,8 +37,23 @@ namespace AdventOfCode.Models
             ThirdParameter = addresses.Count - 1 > PointerPosition + 2 ? addresses[PointerPosition + 3] : 0;
             Memory = addresses;
         }
+        public Instruction(IList<int> addresses, int pointerInstruction, int input)
+            : this(addresses, pointerInstruction)
+        {
+            IsAutomated = true;
+            Input = input;
+        }
+        public Instruction(IList<int> addresses, int pointerInstruction, int phase, int input, bool phaseInitialized, bool inputUsed)
+            : this(addresses, pointerInstruction)
+        {
+            IsAutomated = true;
+            Phase = phase;
+            PhaseInitialized = phaseInitialized;
+            Input = input;
+            InputUsed = inputUsed;
+        }
 
-        public void ProcessInstruction()
+        public bool ProcessInstruction()
         {
             switch (OpCode)
             {
@@ -50,7 +68,7 @@ namespace AdventOfCode.Models
                     break;
                 case OpCode.Output:
                     OutputFirstParameter();
-                    break;
+                    return true;
                 case OpCode.JumpIfTrue:
                     JumpIfTrue();
                     break;
@@ -69,20 +87,8 @@ namespace AdventOfCode.Models
                 default:
                     break;
             }
-        }
 
-        public void ProcessInstruction(int input)
-        {
-            if (OpCode == OpCode.SaveInput)
-            {
-                PhaseInitialized = true;
-                Memory[FirstParameter] = input;
-                PointerPosition += 2;
-            }
-            else
-            {
-                ProcessInstruction();
-            }
+            return false;
         }
 
         public int GetPointerPosition()
@@ -104,8 +110,30 @@ namespace AdventOfCode.Models
 
         private void SaveInput()
         {
-            Console.WriteLine("Enter the ID of the system to test: ");
-            var input = int.Parse(Console.ReadLine());
+            int input;
+            if (IsAutomated)
+            {
+                if (InputUsed)
+                {
+                    Paused = true;
+                    return;
+                }
+                if (!PhaseInitialized)
+                {
+                    PhaseInitialized = true;
+                    input = Phase;
+                }
+                else
+                {
+                    InputUsed = true;
+                    input = Input;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Enter the ID of the system to test: ");
+                input = int.Parse(Console.ReadLine());
+            }
             Memory[FirstParameter] = input;
             PointerPosition += 2;
         }
@@ -113,8 +141,20 @@ namespace AdventOfCode.Models
         private void OutputFirstParameter()
         {
             var value = getValueAtPosition(1);
+            if (IsAutomated)
+            {
+                Output = value;
+            } else
+            {
+                Console.WriteLine(value);
+            }
+            PointerPosition += 2;
+        }
+
+        private void StoreOutput()
+        {
+            var value = getValueAtPosition(1);
             Output = value;
-            //Console.WriteLine(value);
             PointerPosition += 2;
         }
 
