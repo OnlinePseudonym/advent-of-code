@@ -8,7 +8,7 @@ namespace AdventOfCode
     {
         static void Main(string[] args)
         {
-            Day6.LogAnswerToConsole();
+            Day7.LogAnswerToConsole();
         }
     }
 }

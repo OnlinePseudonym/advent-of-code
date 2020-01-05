@@ -7,6 +7,7 @@ namespace AdventOfCode.Models
     {
         private IList<int> Memory { get; set; }
         public IList<int> Input { get; set; }
+        public int Output { get; set; }
 
         public IntcodeComputer(List<int> input)
         {
@@ -21,9 +22,32 @@ namespace AdventOfCode.Models
             while (i < Memory.Count)
             {
                 var instruction = new Instruction(Memory, i);
-                var proccessed = instruction.ProcessInstruction();
+                instruction.ProcessInstruction();
 
-                if (proccessed == -1) break;
+                if (instruction.KillProgram) break;
+                i = instruction.GetPointerPosition();
+            };
+
+            return Memory;
+        }
+
+        public IList<int> CalculateOutput(int phase, int input)
+        {
+            InitilizeMemory();
+            var i = 0;
+            var isPhaseInitilized = false;
+
+            while (i < Memory.Count)
+            {
+                var instructionInput = isPhaseInitilized ? input : phase;
+
+                var instruction = new Instruction(Memory, i);
+                instruction.ProcessInstruction(instructionInput);
+
+                if (instruction.KillProgram) break;
+                if (instruction.Output != 0) Output = instruction.Output;
+                if (instruction.PhaseInitialized) isPhaseInitilized = true;
+
                 i = instruction.GetPointerPosition();
             };
 

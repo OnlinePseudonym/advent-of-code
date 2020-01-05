@@ -16,6 +16,10 @@ namespace AdventOfCode.Models
         private int PointerPosition;
         private IList<int> Memory;
 
+        public bool KillProgram { get; set; } = false;
+        public bool PhaseInitialized { get; set; } = false;
+        public int Output { get; set; }
+
         public Instruction(IList<int> addresses, int pointerInstruction)
         {
             var instructionParameter = Utilities.digitArr(addresses[pointerInstruction]);
@@ -31,7 +35,7 @@ namespace AdventOfCode.Models
             Memory = addresses;
         }
 
-        public int ProcessInstruction()
+        public void ProcessInstruction()
         {
             switch (OpCode)
             {
@@ -60,12 +64,25 @@ namespace AdventOfCode.Models
                     IfEqual();
                     break;
                 case OpCode.Halt:
-                    return -1;
+                    KillProgram = true;
+                    break;
                 default:
                     break;
             }
+        }
 
-            return 0;
+        public void ProcessInstruction(int input)
+        {
+            if (OpCode == OpCode.SaveInput)
+            {
+                PhaseInitialized = true;
+                Memory[FirstParameter] = input;
+                PointerPosition += 2;
+            }
+            else
+            {
+                ProcessInstruction();
+            }
         }
 
         public int GetPointerPosition()
@@ -95,7 +112,9 @@ namespace AdventOfCode.Models
 
         private void OutputFirstParameter()
         {
-            Console.WriteLine(getValueAtPosition(1));
+            var value = getValueAtPosition(1);
+            Output = value;
+            //Console.WriteLine(value);
             PointerPosition += 2;
         }
 
