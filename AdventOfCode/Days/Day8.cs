@@ -28,10 +28,35 @@ namespace AdventOfCode.Days
                 targetLayer.Add(row);
             }
 
-            foreach(var row in targetLayer)
+            PrintResults();
+        }
+
+        private int[] BuildRow(int i)
+        {
+            int[] row = Enumerable.Repeat(2, 25).ToArray();
+
+            foreach (var layer in layers)
+            {
+                var targetRow = layer[i];
+                for (var j = 0; j < targetRow.Length; j++)
+                {
+                    var currentPixel = row[j];
+                    if (currentPixel == 2)
+                    {
+                        row[j] = targetRow[j];
+                    }
+                }
+            }
+            return row;
+        }
+
+        private void PrintResults()
+        {
+
+            foreach (var row in targetLayer)
             {
                 var output = string.Empty;
-                foreach(var pixel in row)
+                foreach (var pixel in row)
                 {
                     if (pixel == 0)
                     {
@@ -44,32 +69,6 @@ namespace AdventOfCode.Days
                 }
                 Console.WriteLine(output);
             }
-        }
-
-        private int[] BuildRow(int i)
-        {
-            int[] row = Enumerable.Repeat(2, 25).ToArray();
-
-            foreach(var layer in layers)
-            {
-                var targetRow = layer[i];
-                for (var j = 0; j < targetRow.Length; j++)
-                {
-                    var currentPixel = row[j];
-                    if (currentPixel == 2) {
-                        row[j] = targetRow[j];
-                    }
-                }
-            }
-            return row;
-        }
-
-        private void PrintResults(int firstDigit, int secondDigit)
-        {
-            var firstFactor = GetCountOfDigit(targetLayer, firstDigit);
-            var secondFactor = GetCountOfDigit(targetLayer, secondDigit);
-
-            Console.WriteLine(firstFactor * secondFactor);
         }
 
         private int GetCountOfDigit(IEnumerable<IEnumerable<int>> layer, int targetDigit)
