@@ -8,8 +8,8 @@ namespace AdventOfCode.Days
 {
     class Day8
     {
-        private IEnumerable<IEnumerable<IEnumerable<int>>> layers;
-        private IEnumerable<IEnumerable<int>> targetLayer;
+        private IEnumerable<int[][]> layers;
+        private List<IEnumerable<int>> targetLayer;
 
         public Day8()
         {
@@ -17,23 +17,51 @@ namespace AdventOfCode.Days
             var intArray = Array.ConvertAll(input, x => (int)Char.GetNumericValue(x));
             var rows = intArray.Chunk(25);
             layers = rows.Chunk(6);
+            targetLayer = new List<IEnumerable<int>>();
         }
 
         public void LogAnswerToConsole()
         {
-            var minCount = int.MaxValue;
+            for (var i = 0; i < 6; i++)
+            {
+                var row = BuildRow(i);
+                targetLayer.Add(row);
+            }
+
+            foreach(var row in targetLayer)
+            {
+                var output = string.Empty;
+                foreach(var pixel in row)
+                {
+                    if (pixel == 0)
+                    {
+                        output += " ";
+                    }
+                    else
+                    {
+                        output += pixel.ToString();
+                    }
+                }
+                Console.WriteLine(output);
+            }
+        }
+
+        private int[] BuildRow(int i)
+        {
+            int[] row = Enumerable.Repeat(2, 25).ToArray();
 
             foreach(var layer in layers)
             {
-                var count = GetCountOfDigit(layer, 0);
-
-                if (count < minCount) {
-                    minCount = count;
-                    targetLayer = layer;
-                };
+                var targetRow = layer[i];
+                for (var j = 0; j < targetRow.Length; j++)
+                {
+                    var currentPixel = row[j];
+                    if (currentPixel == 2) {
+                        row[j] = targetRow[j];
+                    }
+                }
             }
-
-            PrintResults(1, 2);
+            return row;
         }
 
         private void PrintResults(int firstDigit, int secondDigit)
